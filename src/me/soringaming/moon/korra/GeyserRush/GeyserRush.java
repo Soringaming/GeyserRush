@@ -41,19 +41,11 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 			start();
 		}
 	}
-<<<<<<< HEAD
-
-	public void selectSource() {
-		sourceBlock = BlockSource.getWaterSourceBlock(player, 15, ClickType.SHIFT_DOWN, true, true, false, false,
-				false);
-		if (sourceBlock != null && !GeneralMethods.isRegionProtectedFromBuild(this, sourceBlock.getLocation())) {
-=======
 	
 	public boolean selectSource() {
 		Block block = BlockSource.getWaterSourceBlock(player, 15, ClickType.SHIFT_DOWN, true, true, false, false, false);
 		if (block != null && !GeneralMethods.isRegionProtectedFromBuild(this, sourceBlock.getLocation())) {
 			sourceBlock = block;
->>>>>>> origin/master
 			sourceSelected = true;
 			return true;
 		}
@@ -117,17 +109,13 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 
 	@Override
 	public void progress() {
-<<<<<<< HEAD
 		if (player.isOnline() || !player.isOnline()) {
 			return;
 		}
-
-=======
 		dir.setY(0);
 		RevertHead(false);
 		RevertMid(false);
 		RevertTrail(false);
->>>>>>> origin/master
 	}
 
 	@Override
