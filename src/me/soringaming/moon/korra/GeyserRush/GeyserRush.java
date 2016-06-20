@@ -3,14 +3,18 @@ package me.soringaming.moon.korra.GeyserRush;
 import java.util.logging.Level;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.Vector;
 
 import com.projectkorra.projectkorra.ProjectKorra;
+import com.projectkorra.projectkorra.GeneralMethods;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.WaterAbility;
+import com.projectkorra.projectkorra.util.BlockSource;
+import com.projectkorra.projectkorra.util.ClickType;
 
 public class GeyserRush extends WaterAbility implements AddonAbility {
 	
@@ -18,13 +22,23 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 	private Location loc;
 	private Vector dir;
 	private Permission perm;
-	
+	private Block sourceBlock;
+	private boolean sourceSelected;
+
 	public GeyserRush(Player player) {
 		super(player);
 		this.player = player;
 		this.loc = player.getLocation();
 		this.dir = player.getEyeLocation().getDirection().normalize().multiply(1);
 		start();
+	}
+	
+	public void selectSource() {
+		sourceBlock = BlockSource.getWaterSourceBlock(player, 15, ClickType.SHIFT_DOWN, true, true, false, false, false);
+		if (sourceBlock != null && !GeneralMethods.isRegionProtectedFromBuild(this, sourceBlock.getLocation())) {
+			sourceSelected = true;
+			start();
+		}
 	}
 
 	@Override
