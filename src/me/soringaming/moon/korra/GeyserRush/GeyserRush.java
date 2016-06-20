@@ -17,7 +17,7 @@ import com.projectkorra.projectkorra.util.BlockSource;
 import com.projectkorra.projectkorra.util.ClickType;
 
 public class GeyserRush extends WaterAbility implements AddonAbility {
-	
+
 	private Player player;
 	private Location loc;
 	private Vector dir;
@@ -32,9 +32,10 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 		this.dir = player.getEyeLocation().getDirection().normalize().multiply(1);
 		start();
 	}
-	
+
 	public void selectSource() {
-		sourceBlock = BlockSource.getWaterSourceBlock(player, 15, ClickType.SHIFT_DOWN, true, true, false, false, false);
+		sourceBlock = BlockSource.getWaterSourceBlock(player, 15, ClickType.SHIFT_DOWN, true, true, false, false,
+				false);
 		if (sourceBlock != null && !GeneralMethods.isRegionProtectedFromBuild(this, sourceBlock.getLocation())) {
 			sourceSelected = true;
 			start();
@@ -68,7 +69,10 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 
 	@Override
 	public void progress() {
-		
+		if (player.isOnline() || !player.isOnline()) {
+			return;
+		}
+
 	}
 
 	@Override
@@ -83,8 +87,10 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 
 	@Override
 	public void load() {
-		ProjectKorra.plugin.getServer().getLogger().log(Level.INFO, getName() + " " + getVersion() + " Developed By " + getAuthor() + " Has Been Enabled" );
-		ProjectKorra.plugin.getServer().getPluginManager().registerEvents(new GeyserRushListener(), ProjectKorra.plugin);
+		ProjectKorra.plugin.getServer().getLogger().log(Level.INFO,
+				getName() + " " + getVersion() + " Developed By " + getAuthor() + " Has Been Enabled");
+		ProjectKorra.plugin.getServer().getPluginManager().registerEvents(new GeyserRushListener(),
+				ProjectKorra.plugin);
 		perm = new Permission("bending.ability.GeyserRush");
 		perm.setDefault(PermissionDefault.TRUE);
 		ProjectKorra.plugin.getServer().getPluginManager().addPermission(perm);
@@ -92,7 +98,8 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 
 	@Override
 	public void stop() {
-		ProjectKorra.plugin.getServer().getLogger().log(Level.INFO, getName() + " " + getVersion() + " Developed By " + getAuthor() + " Has Been Disabled" );
+		ProjectKorra.plugin.getServer().getLogger().log(Level.INFO,
+				getName() + " " + getVersion() + " Developed By " + getAuthor() + " Has Been Disabled");
 		ProjectKorra.plugin.getServer().getPluginManager().removePermission(perm);
 		super.remove();
 	}
