@@ -1,20 +1,23 @@
 package me.soringaming.moon.korra.GeyserRush;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.Vector;
 
-import com.projectkorra.projectkorra.ProjectKorra;
 import com.projectkorra.projectkorra.GeneralMethods;
+import com.projectkorra.projectkorra.ProjectKorra;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.WaterAbility;
 import com.projectkorra.projectkorra.util.BlockSource;
 import com.projectkorra.projectkorra.util.ClickType;
+import com.projectkorra.projectkorra.util.TempBlock;
 
 public class GeyserRush extends WaterAbility implements AddonAbility {
 
@@ -24,21 +27,66 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 	private Permission perm;
 	private Block sourceBlock;
 	private boolean sourceSelected;
-
+	
+	private static final ConcurrentHashMap<Block, Long> GeyserHead = new ConcurrentHashMap<Block, Long>();
+	private static final ConcurrentHashMap<Block, Long> GeyserMid = new ConcurrentHashMap<Block, Long>();
+	private static final ConcurrentHashMap<Block, Long> GeyserTrail = new ConcurrentHashMap<Block, Long>();
+;
 	public GeyserRush(Player player) {
 		super(player);
 		this.player = player;
-		this.loc = player.getLocation();
+		this.loc = sourceBlock.getLocation();
 		this.dir = player.getEyeLocation().getDirection().normalize().multiply(1);
-		start();
+		if(sourceSelected) {
+			start();
+		}
 	}
+<<<<<<< HEAD
 
 	public void selectSource() {
 		sourceBlock = BlockSource.getWaterSourceBlock(player, 15, ClickType.SHIFT_DOWN, true, true, false, false,
 				false);
 		if (sourceBlock != null && !GeneralMethods.isRegionProtectedFromBuild(this, sourceBlock.getLocation())) {
+=======
+	
+	public boolean selectSource() {
+		Block block = BlockSource.getWaterSourceBlock(player, 15, ClickType.SHIFT_DOWN, true, true, false, false, false);
+		if (block != null && !GeneralMethods.isRegionProtectedFromBuild(this, sourceBlock.getLocation())) {
+			sourceBlock = block;
+>>>>>>> origin/master
 			sourceSelected = true;
-			start();
+			return true;
+		}
+		return false;
+	}
+	
+	public static void RevertHead(boolean doRevert) {
+		for(Block b : GeyserHead.keySet()) {
+			long time = GeyserHead.get(b);
+			if(time < System.currentTimeMillis() || doRevert) {
+				TempBlock.revertBlock(b, Material.AIR);
+				GeyserHead.remove(b);
+			}
+		}
+	}
+	
+	public static void RevertMid(boolean doRevert) {
+		for(Block b : GeyserMid.keySet()) {
+			long time = GeyserMid.get(b);
+			if(time < System.currentTimeMillis() || doRevert) {
+				TempBlock.revertBlock(b, Material.AIR);
+				GeyserMid.remove(b);
+			}
+		}
+	}
+	
+	public static void RevertTrail(boolean doRevert) {
+		for(Block b : GeyserTrail.keySet()) {
+			long time = GeyserTrail.get(b);
+			if(time < System.currentTimeMillis() || doRevert) {
+				TempBlock.revertBlock(b, Material.AIR);
+				GeyserTrail.remove(b);
+			}
 		}
 	}
 
@@ -69,10 +117,17 @@ public class GeyserRush extends WaterAbility implements AddonAbility {
 
 	@Override
 	public void progress() {
+<<<<<<< HEAD
 		if (player.isOnline() || !player.isOnline()) {
 			return;
 		}
 
+=======
+		dir.setY(0);
+		RevertHead(false);
+		RevertMid(false);
+		RevertTrail(false);
+>>>>>>> origin/master
 	}
 
 	@Override
